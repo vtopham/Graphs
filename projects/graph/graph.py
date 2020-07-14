@@ -43,11 +43,24 @@ class Graph:
         return visited
 
     def dft(self, starting_vertex):
-        """
-        Print each vertex in depth-first order
-        beginning from starting_vertex.
-        """
-        pass  # TODO
+        #this one we'll do with a stack
+        visited = []
+        s = Stack()
+        s.push(starting_vertex)
+        while s.size() > 0:
+            
+            cur = s.pop()
+            if cur not in visited:
+                visited.append(cur)
+            
+
+            for v in self.get_neighbors(cur):
+                
+                if v not in visited:
+                    s.push(v)
+            
+        print(f"final visited with dft is {visited}")
+        return visited
 
     def dft_recursive(self, starting_vertex):
         """
