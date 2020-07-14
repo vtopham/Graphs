@@ -39,8 +39,10 @@ class Graph:
                     q.enqueue(v)
             q.dequeue()
         
-        print(f"final visited is {visited}")
-        return visited
+        # print(f"final visited is {visited}")
+        # return visited
+        for x in visited:
+            print(x)
 
     def dft(self, starting_vertex):
         #this one we'll do with a stack
@@ -59,17 +61,29 @@ class Graph:
                 if v not in visited:
                     s.push(v)
             
-        print(f"final visited with dft is {visited}")
-        return visited
+        # print(f"final visited with dft is {visited}")
+        # return visited
+        for x in visited:
+            print(x)
 
     def dft_recursive(self, starting_vertex):
-        """
-        Print each vertex in depth-first order
-        beginning from starting_vertex.
+        
+    
+        visited = set()
+        def dft_guts(starting_vertex, visited):
+            # print(f"visited is {visited} and starting is {starting_vertex}")
+            visited.add(starting_vertex)
+            for x in self.get_neighbors(starting_vertex):
+                if x not in visited:
+                    visited.union(dft_guts(x, visited))
+            # print(f"returning {visited}")
+            return visited
 
-        This should be done using recursion.
-        """
-        pass  # TODO
+        results = dft_guts(starting_vertex, visited)
+        for x in results:
+            print(x)
+
+
 
     def bfs(self, starting_vertex, destination_vertex):
         """
