@@ -86,12 +86,27 @@ class Graph:
 
 
     def bfs(self, starting_vertex, destination_vertex):
-        """
-        Return a list containing the shortest path from
-        starting_vertex to destination_vertex in
-        breath-first order.
-        """
-        pass  # TODO
+        # We will do this using a Queue
+
+     
+
+        q = Queue()
+        cur = None
+        q.enqueue([starting_vertex])
+        while q.size() > 0:
+            path = q.dequeue()
+
+            cur = path[-1]
+
+            if cur == destination_vertex:
+                return path
+            for neighbor in self.get_neighbors(cur):
+                new_path = list(path)
+                new_path.append(neighbor)
+                q.enqueue(new_path)
+        
+        
+        
 
     def dfs(self, starting_vertex, destination_vertex):
         """
