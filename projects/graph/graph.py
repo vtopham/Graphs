@@ -10,25 +10,37 @@ class Graph:
         self.vertices = {}
 
     def add_vertex(self, vertex_id):
-       self.vertices[vertex_id]: set()
-        
+       self.vertices[vertex_id] = set()
+      
 
     def add_edge(self, v1, v2):
-        self.vertices[v1].add(v2)
+        if v1 not in self.vertices:
+            print("Rejected, no vert")
+        else:
+            self.vertices[v1].add(v2)
         
 
     def get_neighbors(self, vertex_id):
-        """
-        Get all neighbors (edges) of a vertex.
-        """
-        pass  # TODO
+        return self.vertices[vertex_id]
 
     def bft(self, starting_vertex):
-        """
-        Print each vertex in breadth-first order
-        beginning from starting_vertex.
-        """
-        pass  # TODO
+        # We will do this using a Queue
+
+        visited = []
+
+        q = Queue()
+        q.enqueue(starting_vertex)
+        while q.size() > 0:
+            cur = q.queue[0]
+            visited.append(cur)
+            # if the current neighbors haven't been visited, add them to the queue to explore
+            for v in self.get_neighbors(cur):
+                if v not in visited:
+                    q.enqueue(v)
+            q.dequeue()
+        
+        print(f"final visited is {visited}")
+        return visited
 
     def dft(self, starting_vertex):
         """
