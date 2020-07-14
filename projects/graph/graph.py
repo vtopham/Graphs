@@ -127,25 +127,26 @@ class Graph:
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         
-        
         def dfs_guts(path, destination_vertex):
-            # print(f"visited is {visited} and starting is {starting_vertex}")
+            print(f"path is {path}, dest is {destination_vertex}")
             node = path[-1]
-            print(f"path is {path}, destination is {destination_vertex}")
+            print(f"node is {node}")
+            if node == destination_vertex:
+                return path
+           
+            else:
+                for neighbor in self.get_neighbors(node):
+                    if neighbor not in path:
+                        new_path = list(path)
+                        new_path.append(neighbor)
+                        poss = dfs_guts(new_path, destination_vertex) 
+                        if poss != None:
+                            return poss
 
-            for x in self.get_neighbors(node):
-                if x not in path:
-                    new_path = list(path)
-                    new_path.append(x)
-                    if x == destination_vertex:
-                        print(f"new path is {new_path}")
-                        return new_path
-                    else:
-                        return dfs_guts(new_path, destination_vertex)
+            return None            
         
-        result = dfs_guts([starting_vertex], destination_vertex)
-        print(f"result is {result}")
-        return result
+        return dfs_guts([starting_vertex], destination_vertex)
+        
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
