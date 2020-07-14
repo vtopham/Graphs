@@ -91,7 +91,7 @@ class Graph:
      
 
         q = Queue()
-        cur = None
+       
         q.enqueue([starting_vertex])
         while q.size() > 0:
             path = q.dequeue()
@@ -109,12 +109,21 @@ class Graph:
         
 
     def dfs(self, starting_vertex, destination_vertex):
-        """
-        Return a list containing a path from
-        starting_vertex to destination_vertex in
-        depth-first order.
-        """
-        pass  # TODO
+        s = Stack()
+        s.push([starting_vertex])
+
+        while s.size() > 0:
+            path = s.pop()
+
+            cur = path[-1]
+
+            if cur == destination_vertex:
+                return path
+            for neighbor in self.get_neighbors(cur):
+                new_path = list(path)
+                new_path.append(neighbor)
+                s.push(new_path)
+
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
