@@ -81,6 +81,33 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+
+        def find_path(path, target):
+            node = path[-1]
+            if node == target:
+                return path
+            else:
+                for x in self.friendships[node]:
+                    if x not in path:
+                        new_path = list(path)
+                        new_path.append(x)
+                        poss = find_path(new_path, target)
+                        if poss == None:
+                            return None
+                        else:
+                            return poss
+                    return None
+        
+        for x in self.users:
+            result = find_path([user_id], x)
+            if result != None:
+                visited[x] = result
+
+        print(visited)
+
+
+
+
         return visited
 
 
