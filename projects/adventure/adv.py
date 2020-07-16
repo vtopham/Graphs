@@ -13,10 +13,10 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
+# map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -58,7 +58,7 @@ def get_path_baby(player, room_from, dir_travelled, graph):
     if cur_room not in graph:
         
         rooms = player.current_room.get_exits()
-       
+        print(f"rooms are {rooms}")
         graph[cur_room] = {}
         for room in rooms:
             graph[cur_room][room] = "?"
@@ -71,7 +71,8 @@ def get_path_baby(player, room_from, dir_travelled, graph):
     for direction in graph[cur_room]:
         if graph[cur_room][direction] == "?":
             get_path_baby(player, cur_room, direction, graph)
-
+            #undo the movement after this runs
+            player.travel(inv_direction(direction))
             
     print(graph)
     return None
