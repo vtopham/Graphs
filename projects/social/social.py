@@ -1,3 +1,5 @@
+import random
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -45,9 +47,29 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
-
+        for x in range(num_users):
+            self.users[x] = set()
+            self.friendships[x] = set()
         # Create friendships
+        poss_friendships = []
+        for x in self.users:
+            for y in range(x + 1, len(self.users)):
+                poss_friendships.append((x, y))
 
+        random.shuffle(poss_friendships)
+        total_friendships = num_users * avg_friendships
+
+        gathered_friendships = poss_friendships[:total_friendships]
+
+        for x in gathered_friendships:
+            print(x)
+            friend_1 = x[0]
+            friend_2 = x[1]
+            
+            self.friendships[friend_1].add(friend_2)
+            self.friendships[friend_2].add(friend_1)
+
+        return self.friendships
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
@@ -59,6 +81,33 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+
+        def find_path(path, target):
+            node = path[-1]
+            if node == target:
+                return path
+            else:
+                for x in self.friendships[node]:
+                    if x not in path:
+                        new_path = list(path)
+                        new_path.append(x)
+                        poss = find_path(new_path, target)
+                        if poss == None:
+                            return None
+                        else:
+                            return poss
+                    return None
+        
+        for x in self.users:
+            result = find_path([user_id], x)
+            if result != None:
+                visited[x] = result
+
+        print(visited)
+
+
+
+
         return visited
 
 

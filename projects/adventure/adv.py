@@ -1,3 +1,5 @@
+#hmmmm
+
 from room import Room
 from player import Player
 from world import World
@@ -27,7 +29,75 @@ player = Player(world.starting_room)
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
+
+def inv_direction(dir_travelled):
+    if dir_travelled == 'n':
+        return 's'
+    if dir_travelled == 's':
+        return 'n'
+    if dir_travelled == 'e':
+        return 'w'
+    if dir_travelled == 'w':
+        return 'e'
+
+graph = {}
+
+def get_path_baby(player, room_from, dir_travelled, graph, traversal_path):
+    #just get a depth first traversal working
+    #Get a dictionary ready to go of all rooms, starting with
+    print(f"moving {dir_travelled}")
+    
+    
+    cur_room = player.current_room.id
+    #unless we're starting, move the player
+    if dir_travelled != None:
+        traversal_path.append(dir_travelled)
+        player.travel(dir_travelled)
+        cur_room = player.current_room.id
+    print(f"we are in room {cur_room}")
+    #if this room isn't in the graph then let's populate it, totally blank
+    if cur_room not in graph:
+        
+        rooms = player.current_room.get_exits()
+        graph[cur_room] = {}
+        for room in rooms:
+            graph[cur_room][room] = "?"
+       
+    #add the edges for this room and the room that we came from
+    if room_from != None:
+        graph[room_from][dir_travelled] = cur_room
+        graph[cur_room][inv_direction(dir_travelled)] = room_from
+
+    
+    for direction in graph[cur_room]:
+        if graph[cur_room][direction] == "?":
+            returned_path = get_path_baby(player, cur_room, direction, graph, traversal_path)
+            print(f"the returned path is {returned_path}")
+            #undo the movement after this runs
+            # traversal_path.extend(returned_path)
+            inv = inv_direction(direction)
+            traversal_path.append(inv)
+            player.travel(inv)
+            
+    print(graph)
+    
+    # return traversal_path
+    return traversal_path
+
+    
+    #for each direction, if you can go in that direction, recurse
+
+
+   
+    
+
 traversal_path = []
+
+result = get_path_baby(player, None, None, graph, traversal_path)
+print(result)
+# print(len(result))
+
+
 
 
 
@@ -51,12 +121,12 @@ else:
 #######
 # UNCOMMENT TO WALK AROUND
 #######
-player.current_room.print_room_description(player)
-while True:
-    cmds = input("-> ").lower().split(" ")
-    if cmds[0] in ["n", "s", "e", "w"]:
-        player.travel(cmds[0], True)
-    elif cmds[0] == "q":
-        break
-    else:
-        print("I did not understand that command.")
+# player.current_room.print_room_description(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     elif cmds[0] == "q":
+#         break
+#     else:
+#         print("I did not understand that command.")

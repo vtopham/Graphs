@@ -58,8 +58,9 @@ class Test(unittest.TestCase):
         sys.stdout = io.StringIO()
         self.graph.bft(1)
         output = sys.stdout.getvalue()
-
+        
         self.assertIn(output, bft)
+        print(f"bft is {bft}")
 
         sys.stdout = stdout_  # Restore stdout
 
