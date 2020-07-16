@@ -42,7 +42,7 @@ def inv_direction(dir_travelled):
 
 graph = {}
 
-def get_path_baby(player, room_from, dir_travelled, graph):
+def get_path_baby(player, room_from, dir_travelled, graph, traversal_path):
     #just get a depth first traversal working
     #Get a dictionary ready to go of all rooms, starting with
     print(f"moving {dir_travelled}")
@@ -51,6 +51,7 @@ def get_path_baby(player, room_from, dir_travelled, graph):
     cur_room = player.current_room.id
     #unless we're starting, move the player
     if dir_travelled != None:
+        traversal_path.append(dir_travelled)
         player.travel(dir_travelled)
         cur_room = player.current_room.id
     print(f"we are in room {cur_room}")
@@ -58,7 +59,6 @@ def get_path_baby(player, room_from, dir_travelled, graph):
     if cur_room not in graph:
         
         rooms = player.current_room.get_exits()
-        print(f"rooms are {rooms}")
         graph[cur_room] = {}
         for room in rooms:
             graph[cur_room][room] = "?"
@@ -68,14 +68,21 @@ def get_path_baby(player, room_from, dir_travelled, graph):
         graph[room_from][dir_travelled] = cur_room
         graph[cur_room][inv_direction(dir_travelled)] = room_from
 
+    
     for direction in graph[cur_room]:
         if graph[cur_room][direction] == "?":
-            get_path_baby(player, cur_room, direction, graph)
+            returned_path = get_path_baby(player, cur_room, direction, graph, traversal_path)
+            print(f"the returned path is {returned_path}")
             #undo the movement after this runs
-            player.travel(inv_direction(direction))
+            # traversal_path.extend(returned_path)
+            inv = inv_direction(direction)
+            traversal_path.append(inv)
+            player.travel(inv)
             
     print(graph)
-    return None
+    
+    # return traversal_path
+    return traversal_path
 
     
     #for each direction, if you can go in that direction, recurse
@@ -84,11 +91,13 @@ def get_path_baby(player, room_from, dir_travelled, graph):
    
     
 
-
-result = get_path_baby(player, None, None, graph)
-print(result)
-
 traversal_path = []
+
+result = get_path_baby(player, None, None, graph, traversal_path)
+print(result)
+# print(len(result))
+
+
 
 
 
