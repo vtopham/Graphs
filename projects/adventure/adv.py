@@ -29,6 +29,14 @@ player = Player(world.starting_room)
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
+def is_it_done(graph):
+    
+    for room in graph:
+        for door in graph[room]:
+            
+            if graph[room][door] == "?":
+                return False
+    return True
 
 def inv_direction(dir_travelled):
     if dir_travelled == 'n':
@@ -57,7 +65,6 @@ def get_path_baby(player, room_from, dir_travelled, graph, traversal_path):
     print(f"we are in room {cur_room}")
     #if this room isn't in the graph then let's populate it, totally blank
     if cur_room not in graph:
-        
         rooms = player.current_room.get_exits()
         graph[cur_room] = {}
         for room in rooms:
@@ -72,14 +79,16 @@ def get_path_baby(player, room_from, dir_travelled, graph, traversal_path):
     for direction in graph[cur_room]:
         if graph[cur_room][direction] == "?":
             returned_path = get_path_baby(player, cur_room, direction, graph, traversal_path)
-            print(f"the returned path is {returned_path}")
+            # print(f"the returned path is {returned_path}")
             #undo the movement after this runs
             # traversal_path.extend(returned_path)
             inv = inv_direction(direction)
-            traversal_path.append(inv)
-            player.travel(inv)
             
-    print(graph)
+            print(is_it_done(graph))
+            skip = is_it_done(graph)
+            if skip == False:
+                traversal_path.append(inv)
+                player.travel(inv)
     
     # return traversal_path
     return traversal_path
